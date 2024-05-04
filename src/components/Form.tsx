@@ -11,8 +11,8 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { FormProvider, useForm } from "react-hook-form";
-import Steps from "./Steps";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 function Form() {
   const form = useForm();
@@ -20,7 +20,6 @@ function Form() {
   return (
     <FormProvider {...form}>
       <div className="flex flex-col items-center justify-center gap-10 text-neutral-900">
-        <Steps />
         <FormField
           control={form.control}
           name="firstName"
@@ -29,7 +28,7 @@ function Form() {
               <FormLabel>First Name</FormLabel>
               <FormControl>
                 <Input
-                  className="border-neutral-800placeholder:text-neutral-400 border"
+                  className="border border-neutral-800 placeholder:text-neutral-500"
                   placeholder="John"
                   {...field}
                 />
@@ -47,7 +46,7 @@ function Form() {
               <FormLabel>Last Name</FormLabel>
               <FormControl>
                 <Input
-                  className="border-neutral-800placeholder:text-neutral-400 border"
+                  className="border border-neutral-800 placeholder:text-neutral-500"
                   placeholder="Doe"
                   {...field}
                 />
@@ -65,7 +64,7 @@ function Form() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
-                  className="border-neutral-800placeholder:text-neutral-400 border"
+                  className="border border-neutral-800 placeholder:text-neutral-500"
                   placeholder="john.doe@domain.com"
                   {...field}
                 />
@@ -75,9 +74,14 @@ function Form() {
             </FormItem>
           )}
         />
-        <Button variant={"outline"} className="px-20 py-6 text-lg font-bold">
-          Next
-        </Button>
+        <Link href="/step-2">
+          <Button
+            variant={"outline"}
+            className="border-neutral-900 px-20 py-6 text-lg font-bold hover:bg-neutral-400"
+          >
+            Next
+          </Button>
+        </Link>
       </div>
     </FormProvider>
   );

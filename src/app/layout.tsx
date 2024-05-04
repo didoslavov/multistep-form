@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Steps from "@/components/Steps";
+import Context from "@/components/Context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-neutral-500`}>{children}</body>
+      <body className={`${inter.className} bg-neutral-300`}>
+        <Context>
+          <main className="container mx-auto grid max-w-[1440px] grid-cols-8">
+            <Steps />
+            {children}
+          </main>
+        </Context>
+      </body>
     </html>
   );
 }

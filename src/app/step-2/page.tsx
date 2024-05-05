@@ -10,17 +10,51 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
+import { updateStep2Data } from "@/lib/updateActions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useStateMachine } from "little-state-machine";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formSchema = z.object({
+  town: z.string().min(5),
+  address: z.string().min(11),
+  phone: z.string().min(6),
+});
 
 function Step2() {
-  const form = useForm();
+  const router = useRouter();
+  const { state, actions } = useStateMachine({
+    updateStep2Data,
+  });
+  const form = useForm<z.infer<typeof formSchema>>({
+    defaultValues: {
+      town: state.town,
+      address: state.address,
+      phone: state.phone,
+    },
+    resolver: zodResolver(formSchema),
+  });
+
+  const onSubmit = (formData: z.infer<typeof formSchema>) => {
+    actions.updateStep2Data({
+      town: formData.town,
+      address: formData.address,
+      phone: formData.phone,
+    });
+
+    router.push("/step-3");
+  };
 
   return (
     <section className="col-start-3 col-end-7 rounded-lg bg-gradient-to-tr from-neutral-300 to-neutral-500 py-20 shadow-lg">
       <FormProvider {...form}>
-        <div className="flex flex-col items-center justify-center gap-10 text-neutral-900">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col items-center justify-center gap-10 text-neutral-900"
+        >
           <FormField
             control={form.control}
             name="town"
@@ -35,7 +69,7 @@ function Step2() {
                   />
                 </FormControl>
                 <FormDescription>Your town.</FormDescription>
-                <FormMessage />
+                <FormMessage className="text-red-900" />
               </FormItem>
             )}
           />
@@ -53,7 +87,7 @@ function Step2() {
                   />
                 </FormControl>
                 <FormDescription>Your address.</FormDescription>
-                <FormMessage />
+                <FormMessage className="text-red-900" />
               </FormItem>
             )}
           />
@@ -71,19 +105,18 @@ function Step2() {
                   />
                 </FormControl>
                 <FormDescription>Your phone number.</FormDescription>
-                <FormMessage />
+                <FormMessage className="text-red-900" />
               </FormItem>
             )}
           />
-          <Link href="/step-3">
-            <Button
-              variant={"outline"}
-              className="border-neutral-900 px-20 py-6 text-lg font-bold hover:bg-neutral-400"
-            >
-              Next
-            </Button>
-          </Link>
-        </div>
+          <Button
+            type="submit"
+            variant={"outline"}
+            className="border-neutral-900 px-20 py-6 text-lg font-bold hover:bg-neutral-400"
+          >
+            Next
+          </Button>
+        </form>
       </FormProvider>
     </section>
   );

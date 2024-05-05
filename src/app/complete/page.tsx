@@ -1,7 +1,17 @@
-import Link from "next/link";
-import React from "react";
+"use client";
 
-function page() {
+import { resetState } from "@/lib/updateActions";
+import { useStateMachine } from "little-state-machine";
+import Link from "next/link";
+import React, { useEffect } from "react";
+
+function Complete() {
+  const { actions } = useStateMachine({ resetState });
+
+  useEffect(() => {
+    actions.resetState();
+  }, []);
+
   return (
     <section className="col-span-full mt-20  justify-self-center text-center text-5xl text-neutral-900">
       <h1 className="mb-20">THANK YOU FOR YOUR ORDER</h1>
@@ -15,4 +25,4 @@ function page() {
   );
 }
 
-export default page;
+export default Complete;
